@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录/注册 - 约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #fff;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+        }
+    </style>
+</head>
+<body class="h-full">
+    <!-- 引入iOS状态栏 -->
+    <iframe src="../components/statusbar.html" class="w-full h-10 border-0"></iframe>
+    
+    <div class="h-full flex flex-col">
+        <!-- 登录页面内容 -->
+        <div class="flex-1 flex flex-col">
+            <!-- 顶部图片区域 -->
+            <div class="gradient-bg h-64 w-full flex items-center justify-center">
+                <img src="https://images.unsplash.com/photo-1516486392848-8b67ef89f113?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="约会图片" class="h-40 w-40 rounded-full object-cover border-4 border-white shadow-lg">
+            </div>
+            
+            <!-- 标题 -->
+            <div class="text-center mt-8 px-6">
+                <h1 class="text-3xl font-bold text-gray-800">约会通</h1>
+                <p class="text-gray-600 mt-2">高品质的约会服务，由专业红娘提供支持</p>
+            </div>
+            
+            <!-- 登录选项 -->
+            <div class="mt-12 px-8">
+                <!-- 微信登录按钮 -->
+                <button class="w-full bg-green-500 text-white py-3 rounded-lg flex items-center justify-center mb-4 shadow-md">
+                    <i class="fab fa-weixin text-xl mr-2"></i>
+                    <span>微信一键登录</span>
+                </button>
+                
+                <!-- 手机号登录按钮 -->
+                <button class="w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-lg flex items-center justify-center shadow-sm">
+                    <i class="fas fa-mobile-alt text-xl mr-2"></i>
+                    <span>手机号登录</span>
+                </button>
+                
+                <!-- 协议说明 -->
+                <div class="mt-8 text-xs text-center text-gray-500">
+                    登录即表示您同意
+                    <a href="#" class="text-pink-500">《用户协议》</a>
+                    和
+                    <a href="#" class="text-pink-500">《隐私政策》</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

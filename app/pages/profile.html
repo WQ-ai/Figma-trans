@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户中心 - 约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        .content-wrapper {
+            padding-bottom: 80px; /* 确保内容不被底部导航栏遮挡 */
+        }
+        .profile-bg {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+        }
+        .setting-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .setting-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+        .popularity-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            height: 180px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- 引入iOS状态栏 -->
+    <iframe src="../components/statusbar.html" class="w-full h-10 border-0"></iframe>
+    
+    <div class="content-wrapper">
+    <!-- 顶部个人信息卡片 -->
+    <div class="profile-bg p-5 pb-8">
+        <div class="flex justify-between items-start">
+            <div class="flex items-center">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="个人头像" class="w-20 h-20 rounded-full object-cover border-2 border-white">
+                <div class="ml-4 text-white">
+                    <h1 class="text-xl font-bold">依依</h1>
+                    <p class="text-sm opacity-90">ID: 10086742</p>
+                    <div class="mt-2 bg-white bg-opacity-20 rounded-full px-3 py-1 text-xs inline-flex items-center">
+                        <i class="fas fa-check-circle mr-1"></i>
+                        <span>已实名认证</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <a href="#" class="bg-white bg-opacity-20 h-10 w-10 rounded-full flex items-center justify-center mr-2">
+                    <i class="fas fa-star text-yellow-300"></i>
+                </a>
+                <button class="bg-white bg-opacity-20 h-10 w-10 rounded-full flex items-center justify-center">
+                    <i class="fas fa-cog text-white"></i>
+                </button>
+            </div>
+        </div>
+        <div class="mt-6 flex justify-between text-white">
+            <div class="text-center">
+                <p class="text-2xl font-bold">87%</p>
+                <p class="text-xs opacity-80">资料完善度</p>
+            </div>
+            <div class="text-center">
+                <p class="text-2xl font-bold">3</p>
+                <p class="text-xs opacity-80">我喜欢的</p>
+            </div>
+            <div class="text-center">
+                <p class="text-2xl font-bold">26</p>
+                <p class="text-xs opacity-80">喜欢我的</p>
+            </div>
+            <div class="text-center">
+                <p class="text-2xl font-bold">1</p>
+                <p class="text-xs opacity-80">约会次数</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 受欢迎程度曲线图 -->
+    <div class="mx-4 mt-3">
+        <div class="popularity-card">
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-lg font-bold text-gray-800">我的受欢迎程度</h2>
+                <div class="text-sm text-pink-500">
+                    <span class="font-bold">热度: 92</span>
+                    <i class="fas fa-fire ml-1"></i>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 mb-3">近30天内的热度变化趋势</p>
+            <div class="chart-container">
+                <canvas id="popularityChart"></canvas>
+            </div>
+            <div class="flex justify-between mt-2 text-xs text-gray-500">
+                <span>4月1日</span>
+                <span>4月15日</span>
+                <span>4月30日</span>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <div class="flex flex-col items-center">
+                    <div class="text-sm font-semibold text-gray-700">+18%</div>
+                    <div class="text-xs text-gray-500">来访增长</div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="text-sm font-semibold text-gray-700">+25%</div>
+                    <div class="text-xs text-gray-500">喜欢增长</div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="text-sm font-semibold text-gray-700">92分</div>
+                    <div class="text-xs text-gray-500">魅力指数</div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="text-sm font-semibold text-gray-700">TOP 5%</div>
+                    <div class="text-xs text-gray-500">地区排名</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 我的服务 -->
+    <div class="mt-3 mx-4">
+        <div class="flex justify-between items-center mb-2">
+            <h2 class="text-lg font-bold text-gray-800">我的服务</h2>
+        </div>
+        <div class="bg-white rounded-xl p-5">
+            <div class="grid grid-cols-4 gap-2">
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center text-pink-500 mb-1">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <span class="text-xs text-gray-700">我的喜欢</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-500 mb-1">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <span class="text-xs text-gray-700">约会记录</span>
+                </div>
+                <a href="my-packages.html" class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-500 mb-1">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <span class="text-xs text-gray-700">我的套餐</span>
+                </a>
+                <a href="date-funds.html" class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-500 mb-1">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <span class="text-xs text-gray-700">约会基金</span>
+                </a>
+            </div>
+            <div class="mt-5 pt-4 border-t border-gray-100">
+                <h3 class="text-md font-bold text-gray-800 mb-3">会员服务</h3>
+                <div class="grid grid-cols-4 gap-2">
+                    <a href="packages.html" class="flex flex-col items-center">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-500 mb-1">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <span class="text-xs text-gray-700">约会套餐</span>
+                    </a>
+                    <a href="matchmaker.html" class="flex flex-col items-center">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 mb-1">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <span class="text-xs text-gray-700">红娘服务</span>
+                    </a>
+                    <a href="#" class="flex flex-col items-center">
+                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-500 mb-1">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <span class="text-xs text-gray-700">形象顾问</span>
+                    </a>
+                </div>
+                <div class="mt-4 grid grid-cols-4 gap-2">
+                    <a href="#" class="flex flex-col items-center">
+                        <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center text-pink-500 mb-1">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <span class="text-xs text-gray-700">我要上墙</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 设置选项 -->
+    <div class="mt-5 mx-4 mb-32">
+        <h2 class="text-lg font-bold text-gray-800 mb-2">设置</h2>
+        <div class="bg-white rounded-xl overflow-hidden">
+            <div class="setting-item">
+                <div class="setting-icon bg-orange-100 text-orange-500">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-gray-800">个人资料</h3>
+                    <p class="text-xs text-gray-500 mt-1">完善个人信息，提高匹配质量</p>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-icon bg-green-100 text-green-500">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-gray-800">隐私设置</h3>
+                    <p class="text-xs text-gray-500 mt-1">管理您的隐私和安全选项</p>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-icon bg-blue-100 text-blue-500">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-gray-800">通知设置</h3>
+                    <p class="text-xs text-gray-500 mt-1">管理推送通知和提醒</p>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-icon bg-yellow-100 text-yellow-500">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-gray-800">消费与发票</h3>
+                    <p class="text-xs text-gray-500 mt-1">查看消费记录和开具电子发票</p>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-icon bg-purple-100 text-purple-500">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-gray-800">客服与帮助</h3>
+                    <p class="text-xs text-gray-500 mt-1">获取帮助和支持</p>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-icon bg-red-100 text-red-500">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-gray-800">退出登录</h3>
+                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+    <!-- 引入底部导航栏 -->
+    <iframe src="../components/navbar.html" class="w-full h-20 border-0 fixed bottom-0 left-0 right-0 z-50" scrolling="no" seamless></iframe>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 绘制受欢迎程度曲线图
+            const ctx = document.getElementById('popularityChart').getContext('2d');
+            
+            // 创建渐变背景
+            const gradient = ctx.createLinearGradient(0, 0, 0, 180);
+            gradient.addColorStop(0, 'rgba(255, 107, 107, 0.2)');
+            gradient.addColorStop(1, 'rgba(255, 107, 107, 0)');
+            
+            // 模拟30天数据
+            const days = 30;
+            const data = [];
+            let lastValue = 65;
+            
+            // 生成模拟数据
+            for (let i = 0; i < days; i++) {
+                // 生成一个-5到10之间的随机变化
+                const change = Math.floor(Math.random() * 15) - 5;
+                lastValue = Math.max(30, Math.min(100, lastValue + change));
+                data.push(lastValue);
+            }
+            
+            // 创建图表
+            const popularityChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: days}, (_, i) => ''),
+                    datasets: [{
+                        label: '受欢迎程度',
+                        data: data,
+                        borderColor: '#FF6B6B',
+                        borderWidth: 2,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        pointBackgroundColor: '#FF6B6B'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    const date = new Date();
+                                    date.setDate(date.getDate() - (days - 1 - index));
+                                    return date.getMonth() + 1 + '月' + date.getDate() + '日';
+                                },
+                                label: function(context) {
+                                    return '热度: ' + context.raw;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false,
+                            min: 0,
+                            max: 120
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

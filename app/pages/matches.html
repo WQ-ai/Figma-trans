@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>匹配列表 - 约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+        }
+        .match-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .tab-item {
+            padding: 12px 0;
+            font-weight: 500;
+            position: relative;
+        }
+        .tab-item.active {
+            color: #FF6B6B;
+            font-weight: 600;
+        }
+        .tab-item.active:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background-color: #FF6B6B;
+            border-radius: 3px;
+        }
+        .match-list {
+            display: none;
+        }
+        .match-list.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- 引入iOS状态栏 -->
+    <iframe src="../components/statusbar.html" class="w-full h-10 border-0"></iframe>
+    
+    <!-- 顶部导航栏 -->
+    <div class="bg-white p-4 flex items-center sticky top-0 shadow-sm z-10">
+        <h1 class="text-xl font-bold text-gray-800">我的匹配</h1>
+        <div class="ml-auto">
+            <button class="bg-gray-100 h-10 w-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-search text-gray-600"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 选项卡导航 -->
+    <div class="bg-white shadow-sm">
+        <div class="flex justify-around">
+            <div class="tab-item active text-center w-1/3" data-tab="mutual">
+                <span>双向喜欢</span>
+            </div>
+            <div class="tab-item text-center text-gray-500 w-1/3" data-tab="i-like">
+                <span>我喜欢的</span>
+            </div>
+            <div class="tab-item text-center text-gray-500 w-1/3" data-tab="like-me">
+                <span>喜欢我的</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 匹配列表内容 -->
+    <div class="p-4 pb-24">
+        <!-- 新匹配提示 -->
+        <div class="bg-pink-50 p-3 rounded-lg flex items-center mb-4">
+            <i class="fas fa-heart text-pink-500 mr-3"></i>
+            <div class="flex-1">
+                <p class="text-gray-800 text-sm font-medium">您有3个新匹配</p>
+                <p class="text-xs text-gray-500">快去和Ta们打招呼吧</p>
+            </div>
+            <button class="text-pink-500 text-sm font-medium">
+                查看全部
+            </button>
+        </div>
+        
+        <!-- 双向喜欢列表 -->
+        <div id="mutualList" class="match-list active">
+            <div class="match-card">
+                <div class="flex items-center">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="用户头像" class="w-16 h-16 rounded-full object-cover">
+                        <div class="absolute bottom-0 right-0 bg-green-500 h-3 w-3 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center">
+                            <h3 class="font-bold text-gray-800">小雨</h3>
+                            <span class="ml-2 text-pink-500 text-xs">28岁</span>
+                            <span class="ml-1 text-gray-500 text-xs">·</span>
+                            <span class="ml-1 text-gray-500 text-xs">北京</span>
+                        </div>
+                        <p class="text-gray-500 text-xs mt-1">金融分析师，喜欢旅行和美食</p>
+                        <div class="flex flex-wrap mt-2">
+                            <span class="text-xs bg-blue-50 text-blue-500 px-2 py-1 rounded-full mr-1 mb-1">高学历</span>
+                            <span class="text-xs bg-purple-50 text-purple-500 px-2 py-1 rounded-full mr-1 mb-1">美食家</span>
+                            <span class="text-xs bg-green-50 text-green-500 px-2 py-1 rounded-full mr-1 mb-1">爱旅行</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center ml-3">
+                        <span class="text-xs text-gray-500">刚刚</span>
+                        <a href="user-date.html" class="mt-2 bg-blue-500 text-white h-8 px-3 rounded-full flex items-center justify-center">
+                            <span class="text-xs whitespace-nowrap">立刻约会</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="match-card">
+                <div class="flex items-center">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="用户头像" class="w-16 h-16 rounded-full object-cover">
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center">
+                            <h3 class="font-bold text-gray-800">阳光</h3>
+                            <span class="ml-2 text-pink-500 text-xs">30岁</span>
+                            <span class="ml-1 text-gray-500 text-xs">·</span>
+                            <span class="ml-1 text-gray-500 text-xs">上海</span>
+                        </div>
+                        <p class="text-gray-500 text-xs mt-1">产品经理，喜欢健身和阅读</p>
+                        <div class="flex flex-wrap mt-2">
+                            <span class="text-xs bg-red-50 text-red-500 px-2 py-1 rounded-full mr-1 mb-1">健身达人</span>
+                            <span class="text-xs bg-yellow-50 text-yellow-600 px-2 py-1 rounded-full mr-1 mb-1">阅读控</span>
+                            <span class="text-xs bg-indigo-50 text-indigo-500 px-2 py-1 rounded-full mr-1 mb-1">产品思维</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center ml-3">
+                        <span class="text-xs text-gray-500">10:30</span>
+                        <a href="user-date.html" class="mt-2 bg-blue-500 text-white h-8 px-3 rounded-full flex items-center justify-center">
+                            <span class="text-xs whitespace-nowrap">立刻约会</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 我喜欢的列表 -->
+        <div id="iLikeList" class="match-list">
+            <div class="match-card">
+                <div class="flex items-center">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="用户头像" class="w-16 h-16 rounded-full object-cover">
+                        <div class="absolute bottom-0 right-0 bg-green-500 h-3 w-3 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center">
+                            <h3 class="font-bold text-gray-800">小美</h3>
+                            <span class="ml-2 text-pink-500 text-xs">25岁</span>
+                            <span class="ml-1 text-gray-500 text-xs">·</span>
+                            <span class="ml-1 text-gray-500 text-xs">成都</span>
+                        </div>
+                        <p class="text-gray-500 text-xs mt-1">插画师，热爱艺术和咖啡</p>
+                        <div class="flex flex-wrap mt-2">
+                            <span class="text-xs bg-pink-50 text-pink-500 px-2 py-1 rounded-full mr-1 mb-1">艺术家</span>
+                            <span class="text-xs bg-brown-50 text-yellow-700 px-2 py-1 rounded-full mr-1 mb-1">咖啡控</span>
+                            <span class="text-xs bg-orange-50 text-orange-500 px-2 py-1 rounded-full mr-1 mb-1">创意灵感</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center ml-3">
+                        <span class="text-xs text-gray-500">昨天</span>
+                        <a href="matchmaker.html" class="mt-2 bg-purple-500 text-white h-8 px-3 rounded-full flex items-center justify-center">
+                            <span class="text-xs whitespace-nowrap">红娘帮我约</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="match-card">
+                <div class="flex items-center">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="用户头像" class="w-16 h-16 rounded-full object-cover">
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center">
+                            <h3 class="font-bold text-gray-800">大山</h3>
+                            <span class="ml-2 text-pink-500 text-xs">32岁</span>
+                            <span class="ml-1 text-gray-500 text-xs">·</span>
+                            <span class="ml-1 text-gray-500 text-xs">广州</span>
+                        </div>
+                        <p class="text-gray-500 text-xs mt-1">设计师，喜欢摄影和旅行</p>
+                        <div class="flex flex-wrap mt-2">
+                            <span class="text-xs bg-gray-50 text-gray-500 px-2 py-1 rounded-full mr-1 mb-1">摄影师</span>
+                            <span class="text-xs bg-blue-50 text-blue-500 px-2 py-1 rounded-full mr-1 mb-1">设计感</span>
+                            <span class="text-xs bg-green-50 text-green-500 px-2 py-1 rounded-full mr-1 mb-1">旅行家</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center ml-3">
+                        <span class="text-xs text-gray-500">周三</span>
+                        <a href="matchmaker.html" class="mt-2 bg-purple-500 text-white h-8 px-3 rounded-full flex items-center justify-center">
+                            <span class="text-xs whitespace-nowrap">红娘帮我约</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 喜欢我的列表 -->
+        <div id="likeMeList" class="match-list">
+            <div class="match-card">
+                <div class="flex items-center">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="用户头像" class="w-16 h-16 rounded-full object-cover">
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center">
+                            <h3 class="font-bold text-gray-800">依依</h3>
+                            <span class="ml-2 text-pink-500 text-xs">27岁</span>
+                            <span class="ml-1 text-gray-500 text-xs">·</span>
+                            <span class="ml-1 text-gray-500 text-xs">深圳</span>
+                        </div>
+                        <p class="text-gray-500 text-xs mt-1">教师，喜欢阅读和烘焙</p>
+                        <div class="flex flex-wrap mt-2">
+                            <span class="text-xs bg-purple-50 text-purple-500 px-2 py-1 rounded-full mr-1 mb-1">烘焙达人</span>
+                            <span class="text-xs bg-yellow-50 text-yellow-600 px-2 py-1 rounded-full mr-1 mb-1">爱阅读</span>
+                            <span class="text-xs bg-blue-50 text-blue-500 px-2 py-1 rounded-full mr-1 mb-1">知识分享</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center ml-3">
+                        <span class="text-xs text-gray-500">上周</span>
+                        <a href="user-date.html" class="mt-2 bg-blue-500 text-white h-8 px-3 rounded-full flex items-center justify-center">
+                            <span class="text-xs whitespace-nowrap">立刻约会</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="match-card">
+                <div class="flex items-center">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="用户头像" class="w-16 h-16 rounded-full object-cover">
+                        <div class="absolute bottom-0 right-0 bg-green-500 h-3 w-3 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="flex items-center">
+                            <h3 class="font-bold text-gray-800">淼淼</h3>
+                            <span class="ml-2 text-pink-500 text-xs">26岁</span>
+                            <span class="ml-1 text-gray-500 text-xs">·</span>
+                            <span class="ml-1 text-gray-500 text-xs">杭州</span>
+                        </div>
+                        <p class="text-gray-500 text-xs mt-1">美妆博主，喜欢旅行和购物</p>
+                        <div class="flex flex-wrap mt-2">
+                            <span class="text-xs bg-pink-50 text-pink-500 px-2 py-1 rounded-full mr-1 mb-1">时尚达人</span>
+                            <span class="text-xs bg-green-50 text-green-500 px-2 py-1 rounded-full mr-1 mb-1">旅行爱好者</span>
+                            <span class="text-xs bg-yellow-50 text-yellow-600 px-2 py-1 rounded-full mr-1 mb-1">魅力十足</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center ml-3">
+                        <span class="text-xs text-gray-500">刚刚</span>
+                        <a href="user-date.html" class="mt-2 bg-blue-500 text-white h-8 px-3 rounded-full flex items-center justify-center">
+                            <span class="text-xs whitespace-nowrap">立刻约会</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 引入底部导航栏 -->
+    <iframe src="../components/navbar.html" class="w-full h-20 border-0 fixed bottom-0 left-0 right-0 z-50" scrolling="no" seamless></iframe>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有选项卡和列表
+            const tabItems = document.querySelectorAll('.tab-item');
+            const matchLists = document.querySelectorAll('.match-list');
+            
+            // 为选项卡添加点击事件
+            tabItems.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有选项卡的活动状态
+                    tabItems.forEach(item => {
+                        item.classList.remove('active');
+                        item.classList.add('text-gray-500');
+                    });
+                    
+                    // 当前选项卡添加活动状态
+                    this.classList.add('active');
+                    this.classList.remove('text-gray-500');
+                    
+                    // 隐藏所有列表
+                    matchLists.forEach(list => {
+                        list.classList.remove('active');
+                    });
+                    
+                    // 显示对应的列表
+                    const tabId = this.getAttribute('data-tab');
+                    if (tabId === 'mutual') {
+                        document.getElementById('mutualList').classList.add('active');
+                    } else if (tabId === 'i-like') {
+                        document.getElementById('iLikeList').classList.add('active');
+                    } else if (tabId === 'like-me') {
+                        document.getElementById('likeMeList').classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

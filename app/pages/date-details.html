@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>约见详情 - 约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+        .content-container {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 80px; /* 为底部导航栏留出空间 */
+        }
+        .date-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- 引入iOS状态栏 -->
+        <iframe src="../components/statusbar.html" class="w-full h-10 border-0"></iframe>
+        
+        <!-- 顶部导航栏 -->
+        <div class="bg-white p-4 flex items-center sticky top-0 shadow-sm z-10">
+            <a href="dates-list.html" class="mr-4">
+                <i class="fas fa-arrow-left text-gray-600"></i>
+            </a>
+            <h1 class="text-xl font-bold text-center flex-1">约见详情</h1>
+            <button>
+                <i class="fas fa-ellipsis-h text-gray-600"></i>
+            </button>
+        </div>
+        
+        <div class="content-container">
+            <!-- 约会信息卡片 -->
+            <div class="px-4 py-4">
+                <div class="date-card">
+                    <div class="flex items-center">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="约会对象头像" class="w-14 h-14 rounded-full object-cover">
+                        <div class="ml-4">
+                            <h2 class="text-lg font-bold text-gray-800">与 小雨 的约会</h2>
+                            <p class="text-sm text-gray-500">已确认 · 2023年6月15日</p>
+                        </div>
+                        <div class="ml-auto">
+                            <button class="bg-pink-500 text-white px-3 py-1 rounded-full text-xs">
+                                详情
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-4 bg-pink-50 p-3 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="bg-pink-500 h-8 w-8 rounded-full flex items-center justify-center text-white text-xs mr-3">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-800 font-medium">北京 三里屯太古里</p>
+                                <p class="text-xs text-gray-500">星巴克旗舰店，2楼靠窗位置</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center mt-3">
+                            <div class="bg-pink-500 h-8 w-8 rounded-full flex items-center justify-center text-white text-xs mr-3">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-800 font-medium">6月15日 下午4:00</p>
+                                <p class="text-xs text-gray-500">预计约会时长: 2小时</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex">
+                        <a href="matchmaker.html" class="flex-1 bg-white border border-pink-500 text-pink-500 py-2 rounded-lg mr-2 flex items-center justify-center">
+                            <i class="fas fa-phone-alt mr-1"></i>
+                            <span>联系红娘</span>
+                        </a>
+                        <button class="flex-1 bg-pink-500 text-white py-2 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-qrcode mr-1"></i>
+                            <span>到场核销</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 约会进度 -->
+            <div class="px-4 pb-24">
+                <h2 class="text-lg font-bold text-gray-800 mb-4">约会进度</h2>
+                <div class="date-card">
+                    <div class="relative">
+                        <!-- 进度步骤区域 -->
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="step-circle bg-pink-500 text-white">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-gray-800 font-medium">约见申请已提交</h3>
+                                    <p class="text-xs text-gray-500 mt-1">6月10日 10:30</p>
+                                    <p class="text-sm text-gray-600 mt-2">您的约见申请已成功提交，红娘正在处理中</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="step-circle bg-pink-500 text-white">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-gray-800 font-medium">对方已同意</h3>
+                                    <p class="text-xs text-gray-500 mt-1">6月11日 14:23</p>
+                                    <p class="text-sm text-gray-600 mt-2">小雨已同意与您约会，红娘正在安排约会细节</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="step-circle bg-pink-500 text-white">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-gray-800 font-medium">约会细节已确认</h3>
+                                    <p class="text-xs text-gray-500 mt-1">6月12日 16:45</p>
+                                    <p class="text-sm text-gray-600 mt-2">红娘周周已为您安排好约会地点和时间</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="step-circle bg-pink-500 text-white border-2 border-pink-200">
+                                    <i class="fas fa-hourglass-half text-xs"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-gray-800 font-medium">等待约会进行</h3>
+                                    <p class="text-xs text-gray-500 mt-1">6月15日 16:00</p>
+                                    <p class="text-sm text-gray-600 mt-2">
+                                        请按时到达约会地点，并使用"到场核销"功能确认到场
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 引入底部导航栏 -->
+    <iframe src="../components/navbar.html" class="w-full h-20 border-0 fixed bottom-0 left-0 right-0 z-50" scrolling="no" seamless></iframe>
+</body>
+</html> 

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自助约会 - 约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100%;
+        }
+        .main-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-area {
+            height: calc(100% - 110px);
+            overflow: hidden;
+        }
+        .steps-container {
+            height: 100%;
+            overflow: hidden;
+        }
+        .step {
+            height: 100%;
+            overflow-y: auto;
+            padding: 16px;
+            padding-bottom: 90px;
+            display: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .step.active {
+            display: block;
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin: 0 4px;
+            background-color: #e5e7eb;
+        }
+        .step-dot.active {
+            background-color: #FF6B6B;
+            width: 24px;
+            border-radius: 4px;
+        }
+        .back-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            z-index: 2;
+        }
+        .location-card, .time-card, .activity-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #333;
+        }
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .option {
+            background-color: #f9f9f9;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        .option.selected {
+            border-color: #FF6B6B;
+            background-color: rgba(255, 107, 107, 0.1);
+        }
+        .option-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #6b7280;
+        }
+        .option.selected .option-icon {
+            color: #FF6B6B;
+        }
+        .next-button, .confirm-button {
+            background-color: #FF6B6B;
+            color: white;
+            padding: 14px 0;
+            border-radius: 50px;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .next-button:disabled, .confirm-button:disabled {
+            background-color: #e5e7eb;
+            color: #9ca3af;
+        }
+        .date-preview {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .partner-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .partner-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 16px;
+            object-fit: cover;
+        }
+        .detail-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        .detail-icon {
+            width: 24px;
+            margin-right: 12px;
+            color: #6b7280;
+            text-align: center;
+        }
+        .detail-text {
+            flex: 1;
+        }
+        .success-animation {
+            text-align: center;
+            margin: 40px 0;
+        }
+        .success-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #10B981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 40px;
+        }
+        /* 购买套餐弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: none;
+        }
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 360px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .package-option {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .package-option.selected {
+            border-color: #FF6B6B;
+            background-color: rgba(255, 107, 107, 0.05);
+        }
+        .package-price {
+            font-weight: bold;
+            color: #FF6B6B;
+        }
+        .modal-footer {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .modal-button {
+            flex: 1;
+            padding: 12px 0;
+            text-align: center;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        .cancel-button {
+            background-color: #f3f4f6;
+            color: #6b7280;
+        }
+        .confirm-payment-button {
+            background-color: #FF6B6B;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- 引入iOS状态栏 -->
+        <iframe src="../components/statusbar.html" class="w-full h-10 border-0"></iframe>
+        
+        <div class="content-area">
+            <!-- 顶部导航栏 -->
+            <div class="bg-white p-4 flex items-center justify-between sticky top-0 shadow-sm z-10">
+                <h1 class="text-xl font-bold text-gray-800 mx-auto">自助约会</h1>
+                <a href="user-detail.html" class="back-button">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </div>
+            
+            <div class="steps-container">
+                <div class="step-indicator">
+                    <div class="step-dot active" data-step="1"></div>
+                    <div class="step-dot" data-step="2"></div>
+                    <div class="step-dot" data-step="3"></div>
+                </div>
+                
+                <!-- 步骤1：选择地点 -->
+                <div class="step active" id="step1">
+                    <div class="location-card">
+                        <h3 class="card-title">您想在哪里约见？</h3>
+                        <div class="option-grid">
+                            <div class="option" data-value="咖啡厅">
+                                <div class="option-icon">
+                                    <i class="fas fa-coffee"></i>
+                                </div>
+                                <div class="option-text">咖啡厅</div>
+                            </div>
+                            <div class="option" data-value="餐厅">
+                                <div class="option-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="option-text">餐厅</div>
+                            </div>
+                            <div class="option" data-value="电影院">
+                                <div class="option-icon">
+                                    <i class="fas fa-film"></i>
+                                </div>
+                                <div class="option-text">电影院</div>
+                            </div>
+                            <div class="option" data-value="公园">
+                                <div class="option-icon">
+                                    <i class="fas fa-tree"></i>
+                                </div>
+                                <div class="option-text">公园</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="location-card">
+                        <h3 class="card-title">具体位置</h3>
+                        <div class="relative">
+                            <input type="text" placeholder="搜索或输入地址" class="w-full py-3 px-4 bg-gray-100 rounded-xl pr-10">
+                            <i class="fas fa-search absolute right-4 top-3 text-gray-400"></i>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <div class="flex items-center p-3 border-b border-gray-100">
+                                <i class="fas fa-map-marker-alt text-gray-500 mr-3"></i>
+                                <div>
+                                    <div class="text-gray-800">星巴克（淮海店）</div>
+                                    <div class="text-gray-500 text-xs">上海市淮海中路123号</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-3 border-b border-gray-100">
+                                <i class="fas fa-map-marker-alt text-gray-500 mr-3"></i>
+                                <div>
+                                    <div class="text-gray-800">Costa Coffee（徐家汇店）</div>
+                                    <div class="text-gray-500 text-xs">上海市徐汇区XX路45号</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="next-button" id="nextToStep2" disabled>下一步</button>
+                </div>
+                
+                <!-- 步骤2：选择时间 -->
+                <div class="step" id="step2">
+                    <div class="time-card">
+                        <h3 class="card-title">您想什么时候约见？</h3>
+                        
+                        <div class="mb-4">
+                            <h4 class="text-gray-600 text-sm mb-2">日期</h4>
+                            <div class="grid grid-cols-4 gap-2">
+                                <div class="option date-option" data-value="2023-06-01">
+                                    <div class="text-gray-400 text-xs mb-1">周六</div>
+                                    <div class="text-lg font-bold">6/1</div>
+                                    <div class="text-gray-400 text-xs mt-1">明天</div>
+                                </div>
+                                <div class="option date-option" data-value="2023-06-02">
+                                    <div class="text-gray-400 text-xs mb-1">周日</div>
+                                    <div class="text-lg font-bold">6/2</div>
+                                </div>
+                                <div class="option date-option" data-value="2023-06-03">
+                                    <div class="text-gray-400 text-xs mb-1">周一</div>
+                                    <div class="text-lg font-bold">6/3</div>
+                                </div>
+                                <div class="option date-option" data-value="2023-06-04">
+                                    <div class="text-gray-400 text-xs mb-1">周二</div>
+                                    <div class="text-lg font-bold">6/4</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-gray-600 text-sm mb-2">时间</h4>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="option time-option" data-value="10:00">10:00</div>
+                                <div class="option time-option" data-value="11:00">11:00</div>
+                                <div class="option time-option" data-value="12:00">12:00</div>
+                                <div class="option time-option" data-value="13:00">13:00</div>
+                                <div class="option time-option" data-value="14:00">14:00</div>
+                                <div class="option time-option" data-value="15:00">15:00</div>
+                                <div class="option time-option" data-value="16:00">16:00</div>
+                                <div class="option time-option" data-value="17:00">17:00</div>
+                                <div class="option time-option" data-value="18:00">18:00</div>
+                            </div>
+                            <p class="text-gray-500 text-xs mt-2">可选择多个时间段，提高匹配成功率</p>
+                        </div>
+
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <h4 class="text-gray-600 text-sm mb-2">位置共享</h4>
+                            <div class="flex items-center justify-between">
+                                <label class="text-gray-700">约会前半小时共享我的位置</label>
+                                <label class="switch relative inline-block w-12 h-6">
+                                    <input type="checkbox" id="locationSharing" class="opacity-0 w-0 h-0">
+                                    <span class="slider absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full transition-all duration-300 before:absolute before:h-4 before:w-4 before:left-1 before:bottom-1 before:bg-white before:rounded-full before:transition-all before:duration-300"></span>
+                                </label>
+                            </div>
+                            <p class="text-gray-500 text-xs mt-2">对方也需同意位置共享，双方才能查看彼此位置</p>
+                        </div>
+                    </div>
+                    
+                    <button class="next-button" id="nextToStep3" disabled>下一步</button>
+                </div>
+                
+                <!-- 步骤3：约见详情确认 -->
+                <div class="step" id="step3">
+                    <div class="date-preview">
+                        <div class="partner-info">
+                            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="阳光的照片" class="partner-avatar">
+                            <div>
+                                <h3 class="font-bold text-gray-800">阳光</h3>
+                                <p class="text-gray-500 text-sm">上海 · 30岁 · 产品经理</p>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="detail-text">
+                                <div class="text-gray-700 font-medium">星巴克（淮海店）</div>
+                                <div class="text-gray-500 text-sm">上海市淮海中路123号</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="far fa-calendar-alt"></i>
+                            </div>
+                            <div class="detail-text">
+                                <div class="text-gray-700 font-medium">6月1日周六</div>
+                                <div class="text-gray-500 text-sm">明天</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="far fa-clock"></i>
+                            </div>
+                            <div class="detail-text">
+                                <div id="selectedTimesDisplay" class="text-gray-700 font-medium">14:00</div>
+                                <div id="locationSharingStatus" class="text-xs text-green-600 mt-1 hidden">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>将在约会前30分钟共享位置
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card">
+                        <h3 class="card-title">给对方留言</h3>
+                        <textarea class="w-full p-3 bg-gray-100 rounded-xl h-24 resize-none" placeholder="对这次约见有什么期待或想法..."></textarea>
+                    </div>
+                    
+                    <button class="confirm-button" id="confirmDate">确认约见</button>
+                </div>
+                
+                <!-- 约见成功提示 -->
+                <div class="step" id="step4">
+                    <div class="success-animation">
+                        <div class="success-circle">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-800 mb-2">约见邀请已发送</h2>
+                        <p class="text-gray-600">我们会在对方接受邀请后通知您</p>
+                    </div>
+                    
+                    <div class="date-preview">
+                        <div class="partner-info">
+                            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="阳光的照片" class="partner-avatar">
+                            <div>
+                                <h3 class="font-bold text-gray-800">阳光</h3>
+                                <p class="text-gray-500 text-sm">上海 · 30岁 · 产品经理</p>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="detail-text">
+                                <div class="text-gray-700 font-medium">星巴克（淮海店）</div>
+                                <div class="text-gray-500 text-sm">上海市淮海中路123号</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="far fa-calendar-alt"></i>
+                            </div>
+                            <div class="detail-text">
+                                <div class="text-gray-700 font-medium">6月1日周六</div>
+                                <div class="text-gray-500 text-sm">明天</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <i class="far fa-clock"></i>
+                            </div>
+                            <div class="detail-text">
+                                <div id="selectedTimesDisplay" class="text-gray-700 font-medium">14:00</div>
+                                <div id="locationSharingStatus" class="text-xs text-green-600 mt-1 hidden">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>将在约会前30分钟共享位置
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 mt-6 mb-20">
+                        <a href="dates-list.html?tab=sent" class="next-button bg-gray-500">查看我的约见</a>
+                        <a href="home.html" class="next-button">返回首页</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 引入底部导航栏 -->
+        <iframe src="../components/navbar.html" class="w-full h-20 border-0 fixed bottom-0 left-0 right-0 z-50" scrolling="no" seamless></iframe>
+    </div>
+    
+    <!-- 购买套餐弹窗 -->
+    <div class="modal-overlay" id="packageModal">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold text-center mb-4">选择套餐</h3>
+            <p class="text-gray-600 text-sm mb-4">发起约见需要消耗约见次数，请选择套餐</p>
+            
+            <div class="package-option selected" data-value="basic">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="font-semibold">基础套餐</h4>
+                        <p class="text-sm text-gray-500">3次约见机会</p>
+                    </div>
+                    <div class="package-price">¥39</div>
+                </div>
+            </div>
+            
+            <div class="package-option" data-value="standard">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="font-semibold">标准套餐</h4>
+                        <p class="text-sm text-gray-500">10次约见机会</p>
+                    </div>
+                    <div class="package-price">¥99</div>
+                </div>
+                <div class="text-xs text-pink-500 mt-1">最受欢迎</div>
+            </div>
+            
+            <div class="package-option" data-value="premium">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="font-semibold">高级套餐</h4>
+                        <p class="text-sm text-gray-500">30次约见机会</p>
+                    </div>
+                    <div class="package-price">¥199</div>
+                </div>
+                <div class="text-xs text-gray-500 mt-1">最划算</div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="modal-button cancel-button" id="cancelPackage">取消</button>
+                <button class="modal-button confirm-payment-button" id="confirmPackage">确认支付</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有步骤和指示器
+            const steps = document.querySelectorAll('.step');
+            const stepDots = document.querySelectorAll('.step-dot');
+            
+            // 获取按钮
+            const nextToStep2Button = document.getElementById('nextToStep2');
+            const nextToStep3Button = document.getElementById('nextToStep3');
+            const confirmDateButton = document.getElementById('confirmDate');
+            
+            // 购买套餐弹窗元素
+            const packageModal = document.getElementById('packageModal');
+            const cancelPackageButton = document.getElementById('cancelPackage');
+            const confirmPackageButton = document.getElementById('confirmPackage');
+            const packageOptions = document.querySelectorAll('.package-option');
+            
+            // 地点选择
+            const locationOptions = document.querySelectorAll('.option[data-value]');
+            let selectedLocation = null;
+            
+            locationOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    if (this.dataset.value) {
+                        selectedLocation = this.dataset.value;
+                        // 仅取消同组选项的选中状态
+                        const parentElement = this.parentElement;
+                        const sameGroupOptions = parentElement.querySelectorAll('.option');
+                        sameGroupOptions.forEach(opt => opt.classList.remove('selected'));
+                        this.classList.add('selected');
+                        
+                        // 检查第一步是否选择了地点
+                        if (this.classList.contains('date-option') || this.classList.contains('time-option')) {
+                            checkTimeSelection();
+                        } else {
+                            nextToStep2Button.disabled = false;
+                        }
+                    }
+                });
+            });
+            
+            // 日期和时间选择
+            const dateOptions = document.querySelectorAll('.date-option');
+            const timeOptions = document.querySelectorAll('.time-option');
+            let selectedDate = null;
+            let selectedTimes = [];
+            
+            dateOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    dateOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedDate = this.dataset.value;
+                    checkTimeSelection();
+                });
+            });
+            
+            timeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // 切换选中状态而不是只选一个
+                    this.classList.toggle('selected');
+                    
+                    // 更新已选时间数组
+                    if (this.classList.contains('selected')) {
+                        selectedTimes.push(this.dataset.value);
+                    } else {
+                        selectedTimes = selectedTimes.filter(time => time !== this.dataset.value);
+                    }
+                    
+                    checkTimeSelection();
+                });
+            });
+            
+            function checkTimeSelection() {
+                nextToStep3Button.disabled = !(selectedDate && selectedTimes.length > 0);
+            }
+            
+            // 步骤导航
+            nextToStep2Button.addEventListener('click', function() {
+                goToStep(2);
+            });
+            
+            nextToStep3Button.addEventListener('click', function() {
+                goToStep(3);
+                // 更新确认页的时间显示
+                updateConfirmationDetails();
+            });
+            
+            // 位置共享切换
+            const locationSharingCheckbox = document.getElementById('locationSharing');
+            let isLocationSharingEnabled = false;
+            
+            locationSharingCheckbox.addEventListener('change', function() {
+                isLocationSharingEnabled = this.checked;
+                const slider = this.nextElementSibling;
+                
+                // 如果切换开关，添加视觉反馈
+                if (this.checked) {
+                    slider.classList.add('bg-green-500');
+                    slider.classList.remove('bg-gray-300');
+                    slider.classList.add('before:translate-x-6');
+                } else {
+                    slider.classList.remove('bg-green-500');
+                    slider.classList.add('bg-gray-300');
+                    slider.classList.remove('before:translate-x-6');
+                }
+            });
+            
+            // 更新确认页面的详情
+            function updateConfirmationDetails() {
+                // 更新选择的时间段
+                const selectedTimesDisplays = document.querySelectorAll('#selectedTimesDisplay');
+                selectedTimesDisplays.forEach(display => {
+                    display.textContent = selectedTimes.sort().join(', ');
+                });
+                
+                // 更新位置共享状态
+                const locationSharingStatuses = document.querySelectorAll('#locationSharingStatus');
+                locationSharingStatuses.forEach(status => {
+                    if (isLocationSharingEnabled) {
+                        status.classList.remove('hidden');
+                    } else {
+                        status.classList.add('hidden');
+                    }
+                });
+            }
+            
+            confirmDateButton.addEventListener('click', function() {
+                // 显示购买套餐弹窗
+                packageModal.classList.add('active');
+            });
+            
+            // 套餐选择
+            packageOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    packageOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            // 取消购买
+            cancelPackageButton.addEventListener('click', function() {
+                packageModal.classList.remove('active');
+            });
+            
+            // 确认购买并进入成功页面
+            confirmPackageButton.addEventListener('click', function() {
+                packageModal.classList.remove('active');
+                goToStep(4);
+            });
+            
+            function goToStep(stepNumber) {
+                steps.forEach(step => step.classList.remove('active'));
+                stepDots.forEach(dot => dot.classList.remove('active'));
+                
+                document.getElementById(`step${stepNumber}`).classList.add('active');
+                
+                // 更新步骤指示器
+                for (let i = 0; i < stepNumber; i++) {
+                    if (stepDots[i]) {
+                        stepDots[i].classList.add('active');
+                    }
+                }
+            }
+            
+            // 更新导航栏活动状态
+            const navbarIframe = document.querySelector('iframe[src="../components/navbar.html"]');
+            navbarIframe.addEventListener('load', function() {
+                try {
+                    const navbarDoc = this.contentWindow.document;
+                    const navItems = navbarDoc.querySelectorAll('.navbar-item');
+                    navItems.forEach(item => {
+                        item.classList.remove('active');
+                        if (item.querySelector('.navbar-text').textContent === '约见') {
+                            item.classList.add('active');
+                        }
+                    });
+                } catch (e) {
+                    console.error('无法访问iframe内容:', e);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

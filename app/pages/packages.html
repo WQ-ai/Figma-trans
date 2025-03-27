@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>套餐购买 - 约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+        }
+        .package-card {
+            background-color: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .package-card.selected {
+            border-color: #FF6B6B;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- 引入iOS状态栏 -->
+    <iframe src="../components/statusbar.html" class="w-full h-10 border-0"></iframe>
+    
+    <!-- 顶部导航栏 -->
+    <div class="bg-white p-4 flex items-center sticky top-0 shadow-sm z-10">
+        <button class="mr-4">
+            <i class="fas fa-arrow-left text-gray-600"></i>
+        </button>
+        <h1 class="text-xl font-bold text-center flex-1">套餐购买</h1>
+        <button>
+            <i class="fas fa-question-circle text-gray-600"></i>
+        </button>
+    </div>
+    
+    <!-- 顶部说明 -->
+    <div class="p-4 text-center">
+        <h2 class="text-2xl font-bold text-gray-800">选择合适的约会套餐</h2>
+        <p class="text-gray-600 mt-2">所有套餐均包含专业红娘服务和全程约会指导</p>
+    </div>
+    
+    <!-- 套餐选择 -->
+    <div class="px-4 pb-24">
+        <!-- 单次约见套餐 -->
+        <div class="package-card selected">
+            <div class="gradient-bg p-4 text-white flex justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-bold">单次约见套餐</h3>
+                    <p class="text-sm opacity-90">体验红娘优质服务</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full h-6 w-6 flex items-center justify-center">
+                    <i class="fas fa-check text-white text-xs"></i>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-end mb-4">
+                    <span class="text-3xl font-bold text-pink-500">¥699</span>
+                    <span class="text-gray-500 text-sm line-through ml-2">¥999</span>
+                    <span class="ml-auto text-xs bg-pink-100 text-pink-500 px-2 py-1 rounded">限时优惠</span>
+                </div>
+                
+                <div class="border-t border-gray-100 pt-4">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">1次高质量约会服务</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">专属红娘一对一服务</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">精选约会场所推荐</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">约会前指导服务</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 季度套餐 -->
+        <div class="package-card">
+            <div class="bg-gray-800 p-4 text-white flex justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-bold">季度套餐</h3>
+                    <p class="text-sm opacity-90">高频次约会服务</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full h-6 w-6 flex items-center justify-center">
+                    <i class="fas fa-circle text-transparent text-xs"></i>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-end mb-4">
+                    <span class="text-3xl font-bold text-gray-800">¥2888</span>
+                    <span class="text-gray-500 text-sm line-through ml-2">¥3999</span>
+                    <span class="ml-auto text-xs bg-blue-100 text-blue-500 px-2 py-1 rounded">热门选择</span>
+                </div>
+                
+                <div class="border-t border-gray-100 pt-4">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">3个月内6次约会服务</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">专属红娘一对一服务</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">精选约会场所推荐</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">约会前指导服务</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">包含1000元约会基金</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 年度套餐 -->
+        <div class="package-card">
+            <div class="bg-gray-800 p-4 text-white flex justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-bold">年度套餐</h3>
+                    <p class="text-sm opacity-90">寻找真爱的不二之选</p>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-full h-6 w-6 flex items-center justify-center">
+                    <i class="fas fa-circle text-transparent text-xs"></i>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-end mb-4">
+                    <span class="text-3xl font-bold text-gray-800">¥8888</span>
+                    <span class="text-gray-500 text-sm line-through ml-2">¥12999</span>
+                    <span class="ml-auto text-xs bg-green-100 text-green-500 px-2 py-1 rounded">最高性价比</span>
+                </div>
+                
+                <div class="border-t border-gray-100 pt-4">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">1年内24次约会服务</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">专属高级红娘服务</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">高端约会场所预订</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">约会全流程指导</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">包含5000元约会基金</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span class="text-gray-700">免费形象提升服务</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部信息与按钮 -->
+        <div class="mt-4 bg-white rounded-xl p-4 mb-6">
+            <div class="flex items-center">
+                <i class="fas fa-shield-alt text-green-500 mr-3 text-lg"></i>
+                <div>
+                    <h4 class="text-gray-800 font-medium">安全保障</h4>
+                    <p class="text-xs text-gray-500 mt-1">所有用户100%实名认证，资金第三方托管</p>
+                </div>
+            </div>
+        </div>
+        
+        <button class="w-full bg-pink-500 text-white py-4 rounded-xl font-bold shadow-md">
+            立即购买
+        </button>
+        
+        <p class="text-xs text-gray-500 text-center mt-3">
+            点击立即购买，表示您已同意<a href="#" class="text-pink-500">《约会通服务协议》</a>
+        </p>
+    </div>
+    
+    <!-- 引入底部导航栏 -->
+    <iframe src="../components/navbar.html" class="w-full h-20 border-0 fixed bottom-0 left-0 right-0 z-50" scrolling="no" seamless></iframe>
+</body>
+</html> 

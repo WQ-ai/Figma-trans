@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红娘服务 - 约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+        }
+        .matchmaker-header {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+        }
+        .service-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        .service-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+        }
+        .package-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 2px solid transparent;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .package-card.selected {
+            border-color: #FF6B6B;
+        }
+        .recommended-badge {
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            background-color: #FF6B6B;
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .price-comparison {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        .testimonial-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 引入iOS状态栏 -->
+    <iframe src="../components/statusbar.html" class="w-full h-10 border-0"></iframe>
+    
+    <!-- 顶部导航栏 -->
+    <div class="bg-white p-4 flex items-center sticky top-0 shadow-sm z-10">
+        <button class="mr-4" onclick="history.back()">
+            <i class="fas fa-arrow-left text-gray-600"></i>
+        </button>
+        <h1 class="text-xl font-bold text-center flex-1">红娘服务</h1>
+        <button>
+            <i class="fas fa-ellipsis-h text-gray-600"></i>
+        </button>
+    </div>
+    
+    <!-- 红娘信息 -->
+    <div class="matchmaker-header p-5">
+        <div class="flex items-center">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="红娘头像" class="w-20 h-20 rounded-full object-cover border-2 border-white">
+            <div class="ml-4 text-white">
+                <h2 class="text-xl font-bold">周周</h2>
+                <p class="text-sm opacity-90">您的专属红娘</p>
+                <div class="mt-2 flex items-center">
+                    <div class="flex items-center">
+                        <i class="fas fa-star text-yellow-300 text-xs"></i>
+                        <i class="fas fa-star text-yellow-300 text-xs"></i>
+                        <i class="fas fa-star text-yellow-300 text-xs"></i>
+                        <i class="fas fa-star text-yellow-300 text-xs"></i>
+                        <i class="fas fa-star text-yellow-300 text-xs"></i>
+                    </div>
+                    <span class="ml-1 text-xs">4.9 (329条评价)</span>
+                </div>
+            </div>
+            <div class="ml-auto">
+                <button class="bg-white h-10 w-10 rounded-full flex items-center justify-center shadow-md">
+                    <i class="fas fa-phone-alt text-pink-500"></i>
+                </button>
+            </div>
+        </div>
+        <div class="mt-4 flex justify-between text-white">
+            <div class="text-center">
+                <p class="text-xl font-bold">127</p>
+                <p class="text-xs opacity-80">成功次数</p>
+            </div>
+            <div class="text-center">
+                <p class="text-xl font-bold">3年</p>
+                <p class="text-xs opacity-80">服务经验</p>
+            </div>
+            <div class="text-center">
+                <p class="text-xl font-bold">98%</p>
+                <p class="text-xs opacity-80">满意度</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 红娘介绍 -->
+    <div class="px-4 py-4">
+        <div class="service-card">
+            <h3 class="text-lg font-bold text-gray-800 mb-2">红娘介绍</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">
+                周周是我们资深的约会顾问，拥有3年匹配经验和心理学背景。擅长倾听客户需求，分析性格特点，为您提供精准匹配和约会指导。已成功促成127对情侣，擅长处理各类约会场景和关系问题。
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2">
+                <span class="bg-pink-100 text-pink-600 text-xs px-3 py-1 rounded-full">资深红娘</span>
+                <span class="bg-pink-100 text-pink-600 text-xs px-3 py-1 rounded-full">心理咨询师</span>
+                <span class="bg-pink-100 text-pink-600 text-xs px-3 py-1 rounded-full">形象顾问</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 服务内容 -->
+    <div class="px-4">
+        <h3 class="text-lg font-bold text-gray-800 mb-2">服务内容</h3>
+        <div class="service-card overflow-hidden">
+            <div class="service-item">
+                <div class="service-icon bg-pink-100 text-pink-500">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <div>
+                    <h4 class="text-gray-800 font-medium">精准匹配</h4>
+                    <p class="text-sm text-gray-500 mt-1">根据您的喜好和性格特点，匹配合适的约会对象</p>
+                </div>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-icon bg-blue-100 text-blue-500">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div>
+                    <h4 class="text-gray-800 font-medium">约会安排</h4>
+                    <p class="text-sm text-gray-500 mt-1">精心挑选约会地点，协调双方时间，提供全程服务</p>
+                </div>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-icon bg-purple-100 text-purple-500">
+                    <i class="fas fa-comment-dots"></i>
+                </div>
+                <div>
+                    <h4 class="text-gray-800 font-medium">沟通指导</h4>
+                    <p class="text-sm text-gray-500 mt-1">提供约会前沟通技巧和话题建议，增加互动质量</p>
+                </div>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-icon bg-green-100 text-green-500">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <div>
+                    <h4 class="text-gray-800 font-medium">形象提升</h4>
+                    <p class="text-sm text-gray-500 mt-1">提供着装和形象建议，让您在约会中展现最佳状态</p>
+                </div>
+            </div>
+            
+            <div class="service-item">
+                <div class="service-icon bg-yellow-100 text-yellow-500">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div>
+                    <h4 class="text-gray-800 font-medium">约会反馈</h4>
+                    <p class="text-sm text-gray-500 mt-1">收集和分析约会后的反馈，持续优化约会体验</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 服务优势 -->
+    <div class="px-4 mt-4">
+        <h3 class="text-lg font-bold text-gray-800 mb-2">为什么选择我们的红娘服务？</h3>
+        <div class="service-card">
+            <div class="flex items-center mb-3">
+                <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 mr-3">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div>
+                    <p class="text-gray-800"><strong>专业团队</strong> - 所有红娘均有专业心理咨询背景</p>
+                </div>
+            </div>
+            <div class="flex items-center mb-3">
+                <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 mr-3">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div>
+                    <p class="text-gray-800"><strong>匹配准确率高</strong> - 根据性格、兴趣、价值观进行匹配</p>
+                </div>
+            </div>
+            <div class="flex items-center mb-3">
+                <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 mr-3">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div>
+                    <p class="text-gray-800"><strong>高效率</strong> - 平均1周内即可匹配，节省筛选时间</p>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 mr-3">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div>
+                    <p class="text-gray-800"><strong>全程服务</strong> - 从匹配到约会全程指导，提高成功率</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 用户评价 -->
+    <div class="px-4 mt-4">
+        <h3 class="text-lg font-bold text-gray-800 mb-2">用户评价</h3>
+        <div class="testimonial-card">
+            <div class="flex items-center mb-2">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="用户头像" class="w-10 h-10 rounded-full object-cover">
+                <div class="ml-3">
+                    <p class="font-semibold text-gray-800">小丽</p>
+                    <div class="flex text-yellow-400 text-xs">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="text-gray-600 text-sm">
+                "感谢周周红娘的帮助，她非常了解我的需求，为我匹配了一位志趣相投的伴侣。约会前的指导让我减少了很多紧张感，现在我们已经交往两个月了！"
+            </p>
+        </div>
+        
+        <div class="testimonial-card">
+            <div class="flex items-center mb-2">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="用户头像" class="w-10 h-10 rounded-full object-cover">
+                <div class="ml-3">
+                    <p class="font-semibold text-gray-800">阿强</p>
+                    <div class="flex text-yellow-400 text-xs">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="text-gray-600 text-sm">
+                "工作太忙没时间找对象，红娘服务真的帮了大忙。第一次约会场所选择很用心，对方正是我喜欢的类型，沟通技巧的指导也非常实用！"
+            </p>
+        </div>
+    </div>
+    
+    <!-- 服务套餐 -->
+    <div class="px-4 mt-4 pb-24">
+        <h3 class="text-lg font-bold text-gray-800 mb-2">选择服务套餐</h3>
+        
+        <div class="package-card" onclick="selectPackage(this, 'basic')">
+            <div class="flex justify-between items-center mb-2">
+                <h4 class="font-bold text-gray-800">基础红娘服务</h4>
+                <div class="flex items-center">
+                    <div class="w-5 h-5 rounded-full border-2 border-gray-300 mr-2 radio-button" id="radio-basic"></div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <span class="text-lg font-bold text-pink-500">¥199</span>
+                <span class="price-comparison ml-2">¥399</span>
+                <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded ml-2">5折优惠</span>
+            </div>
+            <ul class="text-sm text-gray-600">
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>1次红娘精准匹配服务</span>
+                </li>
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>约会地点建议</span>
+                </li>
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>基础约会指导</span>
+                </li>
+                <li class="flex items-start text-gray-400">
+                    <i class="fas fa-times text-gray-400 mr-2 mt-1"></i>
+                    <span>后续跟进服务</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="package-card selected" onclick="selectPackage(this, 'premium')">
+            <div class="recommended-badge">推荐</div>
+            <div class="flex justify-between items-center mb-2">
+                <h4 class="font-bold text-gray-800">高级红娘服务</h4>
+                <div class="flex items-center">
+                    <div class="w-5 h-5 rounded-full border-2 border-pink-500 mr-2 radio-button" id="radio-premium">
+                        <div class="w-3 h-3 bg-pink-500 rounded-full m-auto"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <span class="text-lg font-bold text-pink-500">¥499</span>
+                <span class="price-comparison ml-2">¥899</span>
+                <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded ml-2">限时特惠</span>
+            </div>
+            <ul class="text-sm text-gray-600">
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>3次红娘精准匹配服务</span>
+                </li>
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>约会全程规划与建议</span>
+                </li>
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>形象提升与沟通指导</span>
+                </li>
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>约会后1个月跟进服务</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>专属红娘一对一咨询</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="package-card" onclick="selectPackage(this, 'vip')">
+            <div class="flex justify-between items-center mb-2">
+                <h4 class="font-bold text-gray-800">VIP红娘服务</h4>
+                <div class="flex items-center">
+                    <div class="w-5 h-5 rounded-full border-2 border-gray-300 mr-2 radio-button" id="radio-vip"></div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <span class="text-lg font-bold text-pink-500">¥999</span>
+                <span class="price-comparison ml-2">¥1999</span>
+                <span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded ml-2">尊享特权</span>
+            </div>
+            <ul class="text-sm text-gray-600">
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>6个月内不限次数匹配服务</span>
+                </li>
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>约会全程VIP定制服务</span>
+                </li>
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>专业形象顾问一对一指导</span>
+                </li>
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>约会后3个月跟进服务</span>
+                </li>
+                <li class="mb-1 flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>专属高级红娘24小时咨询</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    <span>约会地点预订与接送服务</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- 购买按钮 -->
+        <button class="w-full bg-pink-500 text-white py-4 rounded-xl mt-4 font-bold shadow-md">
+            立即购买高级服务
+        </button>
+        <p class="text-center text-gray-500 text-xs mt-2">
+            点击购买即表示您同意<a href="#" class="text-pink-500">服务条款</a>和<a href="#" class="text-pink-500">隐私政策</a>
+        </p>
+    </div>
+    
+    <!-- 引入底部导航栏 -->
+    <iframe src="../components/navbar.html" class="w-full h-20 border-0 fixed bottom-0 left-0 right-0 z-50" scrolling="no" seamless></iframe>
+    
+    <script>
+        function selectPackage(element, packageType) {
+            // 移除所有卡片的选中状态
+            document.querySelectorAll('.package-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // 重置所有单选按钮
+            document.querySelectorAll('.radio-button').forEach(radio => {
+                radio.innerHTML = '';
+                radio.classList.remove('border-pink-500');
+                radio.classList.add('border-gray-300');
+            });
+            
+            // 设置当前卡片为选中状态
+            element.classList.add('selected');
+            
+            // 更新单选按钮状态
+            const radioButton = document.getElementById('radio-' + packageType);
+            radioButton.classList.remove('border-gray-300');
+            radioButton.classList.add('border-pink-500');
+            radioButton.innerHTML = '<div class="w-3 h-3 bg-pink-500 rounded-full m-auto"></div>';
+            
+            // 更新购买按钮文本
+            let buttonText = "立即购买";
+            if (packageType === 'basic') {
+                buttonText += "基础服务";
+            } else if (packageType === 'premium') {
+                buttonText += "高级服务";
+            } else if (packageType === 'vip') {
+                buttonText += "VIP服务";
+            }
+            
+            document.querySelector('button.bg-pink-500').textContent = buttonText;
+        }
+    </script>
+</body>
+</html> 

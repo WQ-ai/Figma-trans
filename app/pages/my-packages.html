@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的套餐 - 约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+        .content-container {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 80px; /* 为底部导航栏留出空间 */
+        }
+        .package-card {
+            background-color: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+            border-radius: 3px;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- 引入iOS状态栏 -->
+        <iframe src="../components/statusbar.html" class="w-full h-10 border-0"></iframe>
+        
+        <!-- 顶部导航栏 -->
+        <div class="bg-white p-4 flex items-center sticky top-0 shadow-sm z-10">
+            <a href="profile.html" class="mr-4">
+                <i class="fas fa-arrow-left text-gray-600"></i>
+            </a>
+            <h1 class="text-xl font-bold text-center flex-1">我的套餐</h1>
+            <button>
+                <i class="fas fa-ellipsis-h text-gray-600"></i>
+            </button>
+        </div>
+        
+        <div class="content-container">
+            <!-- 当前套餐 -->
+            <div class="p-4">
+                <h2 class="text-lg font-bold text-gray-800 mb-3">当前套餐</h2>
+                
+                <!-- 季度套餐卡片 -->
+                <div class="package-card">
+                    <div class="gradient-bg p-4 text-white">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xl font-bold">季度约会套餐</h3>
+                            <span class="bg-white bg-opacity-30 px-2 py-1 rounded text-xs">使用中</span>
+                        </div>
+                        <p class="text-sm opacity-90 mt-1">有效期至：2023年12月31日</p>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-gray-700">套餐使用进度</span>
+                            <span class="text-pink-500 font-medium">2/6次</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 33%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">您已使用2次约会服务，剩余4次约会</p>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex flex-col">
+                                    <span class="text-gray-500 text-xs">套餐总价</span>
+                                    <span class="text-gray-800 font-bold mt-1">¥2,888</span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-gray-500 text-xs">购买时间</span>
+                                    <span class="text-gray-800 font-medium mt-1">2023-10-01</span>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mt-4">
+                                <div class="flex flex-col">
+                                    <span class="text-gray-500 text-xs">约会基金</span>
+                                    <span class="text-gray-800 font-medium mt-1">¥1,000元</span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-gray-500 text-xs">专属红娘</span>
+                                    <span class="text-gray-800 font-medium mt-1">周红</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-5 flex">
+                                <button class="flex-1 bg-white border border-pink-500 text-pink-500 py-2 rounded-lg mr-2 flex items-center justify-center">
+                                    <i class="fas fa-redo-alt mr-1"></i>
+                                    <span>续费套餐</span>
+                                </button>
+                                <button class="flex-1 bg-pink-500 text-white py-2 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-calendar-plus mr-1"></i>
+                                    <span>预约约会</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 套餐权益 -->
+            <div class="p-4">
+                <h2 class="text-lg font-bold text-gray-800 mb-3">套餐权益</h2>
+                <div class="package-card p-4">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <div>
+                            <h4 class="text-gray-800 font-medium">专属红娘一对一服务</h4>
+                            <p class="text-xs text-gray-500 mt-1">红娘全程指导与匹配优质约会对象</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <div>
+                            <h4 class="text-gray-800 font-medium">3个月内6次约会服务</h4>
+                            <p class="text-xs text-gray-500 mt-1">每月最多安排2次高质量约会</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <div>
+                            <h4 class="text-gray-800 font-medium">精选约会场所推荐</h4>
+                            <p class="text-xs text-gray-500 mt-1">根据双方兴趣推荐合适约会场所</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <div>
+                            <h4 class="text-gray-800 font-medium">约会基金1000元</h4>
+                            <p class="text-xs text-gray-500 mt-1">可用于兑换各类消费券</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <div>
+                            <h4 class="text-gray-800 font-medium">约会前指导服务</h4>
+                            <p class="text-xs text-gray-500 mt-1">提供着装、话题等全方位指导</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 约会记录 -->
+            <div class="p-4 mb-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-lg font-bold text-gray-800">约会记录</h2>
+                    <a href="dates-list.html" class="text-pink-500 text-sm">查看全部</a>
+                </div>
+                
+                <div class="package-card p-4">
+                    <div class="border-l-4 border-pink-500 pl-3 mb-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-gray-800 font-medium">与小雨的约会</h4>
+                                <p class="text-xs text-gray-500 mt-1">2023年10月15日 下午4:00</p>
+                            </div>
+                            <span class="bg-green-100 text-green-600 text-xs px-2 py-1 rounded">已完成</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">北京三里屯太古里 · 星巴克咖啡</p>
+                    </div>
+                    
+                    <div class="border-l-4 border-pink-500 pl-3">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-gray-800 font-medium">与小丽的约会</h4>
+                                <p class="text-xs text-gray-500 mt-1">2023年11月05日 晚上7:00</p>
+                            </div>
+                            <span class="bg-pink-100 text-pink-600 text-xs px-2 py-1 rounded">已确认</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">成都远洋太古里 · 海底捞火锅</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 推荐套餐 -->
+            <div class="p-4 mb-6">
+                <h2 class="text-lg font-bold text-gray-800 mb-3">推荐套餐</h2>
+                <div class="package-card p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-gray-800 font-bold">年度套餐</h3>
+                            <p class="text-xs text-gray-500 mt-1">24次约会服务，高性价比选择</p>
+                        </div>
+                        <span class="text-pink-500 font-bold">¥8,888</span>
+                    </div>
+                    <button class="w-full bg-pink-500 text-white py-2 rounded-lg mt-4 font-medium">
+                        立即升级
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 引入底部导航栏 -->
+    <iframe src="../components/navbar.html" class="w-full h-20 border-0 fixed bottom-0 left-0 right-0 z-50" scrolling="no" seamless></iframe>
+</body>
+</html> 

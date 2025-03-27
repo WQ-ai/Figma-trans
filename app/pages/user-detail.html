@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户详情 - 约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100%;
+        }
+        .main-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 100px;
+            height: calc(100% - 110px);
+        }
+        .photo-gallery {
+            position: relative;
+            height: 450px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .main-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .photo-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        .photo-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        .photo-dot.active {
+            background-color: white;
+            width: 10px;
+            height: 10px;
+        }
+        .user-info-card {
+            background-color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            margin-top: -20px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.05);
+        }
+        .tag {
+            background-color: rgba(255, 107, 107, 0.1);
+            color: #FF6B6B;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+        .verified-badge {
+            color: #4CAEFF;
+            font-size: 18px;
+            margin-left: 6px;
+        }
+        .match-percent {
+            background-color: rgba(255, 107, 107, 0.1);
+            color: #FF6B6B;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .info-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .info-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .action-buttons {
+            position: fixed;
+            bottom: 90px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 15px;
+            z-index: 40;
+        }
+        .back-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 2;
+        }
+        .date-button {
+            background-color: #FF6B6B;
+            color: white;
+            padding: 14px 0;
+            border-radius: 50px;
+            font-weight: 600;
+            text-align: center;
+            width: 70%;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+        .like-button {
+            background-color: white;
+            color: #FF6B6B;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 20px;
+        }
+        .message-button {
+            background-color: white;
+            color: #4CAEFF;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 20px;
+        }
+        .photo-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .badge {
+            position: absolute;
+            bottom: 60px;
+            left: 15px;
+            background-color: #FF4757;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            z-index: 2;
+        }
+        .popularity-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            height: 160px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- 引入iOS状态栏 -->
+        <iframe src="../components/statusbar.html" class="w-full h-10 border-0"></iframe>
+        
+        <div class="content-area">
+            <!-- 照片展示区 -->
+            <div class="photo-gallery">
+                <a href="home.html" class="back-button">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <div class="photo-indicator">1/5</div>
+                <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="阳光的照片" class="main-photo">
+                <div class="badge">
+                    <i class="fas fa-crown mr-1"></i>
+                    <span>红娘精选</span>
+                </div>
+                <div class="photo-nav">
+                    <div class="photo-dot active"></div>
+                    <div class="photo-dot"></div>
+                    <div class="photo-dot"></div>
+                    <div class="photo-dot"></div>
+                    <div class="photo-dot"></div>
+                </div>
+            </div>
+            
+            <!-- 用户信息卡片 -->
+            <div class="user-info-card">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold text-gray-800">阳光</h1>
+                        <i class="fas fa-check-circle verified-badge"></i>
+                        <span class="ml-2 text-gray-500">30岁</span>
+                    </div>
+                    <div class="match-percent">
+                        85% 匹配
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 mb-4">上海 · 2km · 产品经理</p>
+                
+                <div class="flex flex-wrap mb-6">
+                    <span class="tag">健身</span>
+                    <span class="tag">阅读</span>
+                    <span class="tag">电影</span>
+                    <span class="tag">咖啡</span>
+                    <span class="tag">美食</span>
+                    <span class="tag">旅行</span>
+                </div>
+                
+                <!-- 受欢迎程度曲线图 -->
+                <div class="info-section">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="info-title">受欢迎程度</h2>
+                        <div class="text-sm text-pink-500">
+                            <span class="font-bold">热度: 96</span>
+                            <i class="fas fa-fire ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="popularityChart"></canvas>
+                    </div>
+                    <div class="flex justify-between mt-3 text-xs text-gray-500">
+                        <span>4月1日</span>
+                        <span>4月15日</span>
+                        <span>4月30日</span>
+                    </div>
+                    <div class="mt-3 flex justify-between">
+                        <div class="flex flex-col items-center">
+                            <div class="text-sm font-semibold text-gray-700">+28%</div>
+                            <div class="text-xs text-gray-500">来访增长</div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="text-sm font-semibold text-gray-700">+32%</div>
+                            <div class="text-xs text-gray-500">喜欢增长</div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="text-sm font-semibold text-gray-700">96分</div>
+                            <div class="text-xs text-gray-500">魅力指数</div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="text-sm font-semibold text-gray-700">TOP 3%</div>
+                            <div class="text-xs text-gray-500">地区排名</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <h2 class="info-title">关于我</h2>
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        工作之余喜欢健身和阅读，希望找到志同道合的伴侣一起成长。喜欢探索新的咖啡馆，尝试不同的美食。每年会安排几次旅行，欣赏不同的风景和文化。希望遇到一个懂得生活、有共同兴趣的人。
+                    </p>
+                </div>
+                
+                <div class="info-section">
+                    <h2 class="info-title">基本信息</h2>
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div class="flex items-center">
+                            <i class="fas fa-building text-gray-400 mr-3"></i>
+                            <div>
+                                <div class="text-gray-700">产品经理</div>
+                                <div class="text-gray-500 text-xs">职业</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-graduation-cap text-gray-400 mr-3"></i>
+                            <div>
+                                <div class="text-gray-700">硕士</div>
+                                <div class="text-gray-500 text-xs">学历</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center mt-4">
+                            <i class="fas fa-ruler-vertical text-gray-400 mr-3"></i>
+                            <div>
+                                <div class="text-gray-700">180cm</div>
+                                <div class="text-gray-500 text-xs">身高</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center mt-4">
+                            <i class="fas fa-heart text-gray-400 mr-3"></i>
+                            <div>
+                                <div class="text-gray-700">单身</div>
+                                <div class="text-gray-500 text-xs">状态</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <h2 class="info-title">社交媒体</h2>
+                    <div class="flex space-x-4">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 text-blue-500">
+                            <i class="fab fa-weibo"></i>
+                        </div>
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 text-green-500">
+                            <i class="fab fa-weixin"></i>
+                        </div>
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-red-100 text-red-500">
+                            <i class="fab fa-tiktok"></i>
+                        </div>
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-purple-100 text-purple-500">
+                            <i class="fas fa-music"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <h2 class="info-title">生活点滴</h2>
+                    <div class="grid grid-cols-3 gap-2">
+                        <img src="https://images.unsplash.com/photo-1574723452889-8e4490642823?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="生活照" class="w-full h-24 object-cover rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="生活照" class="w-full h-24 object-cover rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1540247110674-31e928ee852a?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="生活照" class="w-full h-24 object-cover rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1594377157609-c7984d769654?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="生活照" class="w-full h-24 object-cover rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="生活照" class="w-full h-24 object-cover rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="生活照" class="w-full h-24 object-cover rounded-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 操作按钮 -->
+        <div class="action-buttons">
+            <div class="like-button">
+                <i class="fas fa-heart"></i>
+            </div>
+            <a href="user-date.html" class="date-button w-1/3">
+                自助约会
+            </a>
+            <a href="matchmaker.html" class="date-button bg-purple-500 w-1/3">
+                红娘安排
+            </a>
+            <div class="message-button">
+                <i class="fas fa-comment"></i>
+            </div>
+        </div>
+        
+        <!-- 引入底部导航栏 -->
+        <iframe src="../components/navbar.html" class="w-full h-20 border-0 fixed bottom-0 left-0 right-0 z-50" scrolling="no" seamless></iframe>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 绘制受欢迎程度曲线图
+            const ctx = document.getElementById('popularityChart').getContext('2d');
+            
+            // 创建渐变背景
+            const gradient = ctx.createLinearGradient(0, 0, 0, 160);
+            gradient.addColorStop(0, 'rgba(255, 107, 107, 0.2)');
+            gradient.addColorStop(1, 'rgba(255, 107, 107, 0)');
+            
+            // 模拟30天数据
+            const days = 30;
+            const data = [];
+            let lastValue = 75;
+            
+            // 生成模拟数据 - 上升趋势
+            for (let i = 0; i < days; i++) {
+                // 生成一个0到15之间的随机变化，偏向上升
+                const change = Math.floor(Math.random() * 15) - 3;
+                lastValue = Math.max(40, Math.min(100, lastValue + change));
+                data.push(lastValue);
+            }
+            
+            // 创建图表
+            const popularityChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: days}, (_, i) => ''),
+                    datasets: [{
+                        label: '受欢迎程度',
+                        data: data,
+                        borderColor: '#FF6B6B',
+                        borderWidth: 2,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        pointBackgroundColor: '#FF6B6B'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    const date = new Date();
+                                    date.setDate(date.getDate() - (days - 1 - index));
+                                    return date.getMonth() + 1 + '月' + date.getDate() + '日';
+                                },
+                                label: function(context) {
+                                    return '热度: ' + context.raw;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            display: false,
+                            min: 0,
+                            max: 120
+                        }
+                    }
+                }
+            });
+            
+            // 照片浏览功能
+            const photoGallery = document.querySelector('.photo-gallery');
+            const mainPhoto = document.querySelector('.main-photo');
+            const indicator = document.querySelector('.photo-indicator');
+            const dots = document.querySelectorAll('.photo-dot');
+            
+            // 照片数组
+            const photos = [
+                'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+                'https://images.unsplash.com/photo-1488161628813-04466f872be2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+                'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+                'https://images.unsplash.com/photo-1542178243-bc20204b769f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+                'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'
+            ];
+            
+            let currentPhotoIndex = 0;
+            
+            // 更新照片和导航点
+            function updatePhotoDisplay() {
+                mainPhoto.src = photos[currentPhotoIndex];
+                indicator.textContent = `${currentPhotoIndex + 1}/${photos.length}`;
+                
+                // 更新导航点
+                dots.forEach((dot, index) => {
+                    if (index === currentPhotoIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            // 点击照片切换到下一张
+            photoGallery.addEventListener('click', function(e) {
+                // 避免点击后退按钮时触发
+                if (e.target.closest('.back-button')) return;
+                
+                currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+                updatePhotoDisplay();
+            });
+            
+            // 点击导航点切换到对应照片
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 防止触发photoGallery的点击事件
+                    currentPhotoIndex = index;
+                    updatePhotoDisplay();
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

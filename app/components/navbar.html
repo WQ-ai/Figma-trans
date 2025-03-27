@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            height: 80px;
+            width: 100%;
+            padding-bottom: env(safe-area-inset-bottom, 0);
+        }
+        .navbar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            height: 100%;
+        }
+        .navbar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .navbar-item.active {
+            color: #FF6B6B;
+        }
+        .navbar-icon {
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+        }
+        .navbar-text {
+            font-size: 0.75rem;
+        }
+        .navbar-item:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-grid">
+            <a href="../pages/home.html" class="navbar-item active" target="_top">
+                <i class="fas fa-home navbar-icon"></i>
+                <span class="navbar-text">首页</span>
+            </a>
+            <a href="../pages/matches.html" class="navbar-item" target="_top">
+                <i class="fas fa-heart navbar-icon"></i>
+                <span class="navbar-text">匹配</span>
+            </a>
+            <a href="../pages/dates-list.html" class="navbar-item" target="_top">
+                <i class="fas fa-calendar-alt navbar-icon"></i>
+                <span class="navbar-text">约见</span>
+            </a>
+            <a href="../pages/profile.html" class="navbar-item" target="_top">
+                <i class="fas fa-user navbar-icon"></i>
+                <span class="navbar-text">我的</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html> 

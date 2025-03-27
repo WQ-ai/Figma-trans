@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f2f2f7;
+            padding: 30px;
+        }
+        
+        .prototype-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #333;
+        }
+        
+        .prototype-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(390px, 1fr));
+            gap: 50px;
+            justify-content: center;
+        }
+        
+        .phone-container {
+            width: 390px;
+            height: 844px;
+            background-color: white;
+            border-radius: 54px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 14px solid #000;
+            margin: 0 auto;
+        }
+        
+        .dynamic-island {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 126px;
+            height: 37px;
+            background-color: #000;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 10;
+        }
+        
+        .screen {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 40px;
+            position: relative;
+        }
+        
+        .iframe-container {
+            width: 100%;
+            height: 100%;
+            border: none;
+            overflow: hidden;
+        }
+        
+        .phone-label {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="prototype-title">约会通 App 原型</h1>
+    
+    <div class="prototype-grid">
+        <!-- 首页 -->
+        <div>
+            <div class="phone-container">
+                <div class="dynamic-island"></div>
+                <div class="screen">
+                    <iframe src="pages/home.html" class="iframe-container" scrolling="no"></iframe>
+                </div>
+            </div>
+            <div class="phone-label">首页</div>
+        </div>
+        
+        <!-- 匹配列表 -->
+        <div>
+            <div class="phone-container">
+                <div class="dynamic-island"></div>
+                <div class="screen">
+                    <iframe src="pages/matches.html" class="iframe-container" scrolling="no"></iframe>
+                </div>
+            </div>
+            <div class="phone-label">匹配列表</div>
+        </div>
+        
+        <!-- 约见列表页 -->
+        <div>
+            <div class="phone-container">
+                <div class="dynamic-island"></div>
+                <div class="screen">
+                    <iframe src="pages/dates-list.html" class="iframe-container" scrolling="no"></iframe>
+                </div>
+            </div>
+            <div class="phone-label">约见列表</div>
+        </div>
+        
+        <!-- 个人资料 -->
+        <div>
+            <div class="phone-container">
+                <div class="dynamic-island"></div>
+                <div class="screen">
+                    <iframe src="pages/profile.html" class="iframe-container" scrolling="no"></iframe>
+                </div>
+            </div>
+            <div class="phone-label">个人资料</div>
+        </div>
+        
+        <!-- 用户详情页 -->
+        <div>
+            <div class="phone-container">
+                <div class="dynamic-island"></div>
+                <div class="screen">
+                    <iframe src="pages/user-detail.html" class="iframe-container" scrolling="no"></iframe>
+                </div>
+            </div>
+            <div class="phone-label">用户详情</div>
+        </div>
+        
+        <!-- 用户约见流程 -->
+        <div>
+            <div class="phone-container">
+                <div class="dynamic-island"></div>
+                <div class="screen">
+                    <iframe src="pages/user-date.html" class="iframe-container" scrolling="no"></iframe>
+                </div>
+            </div>
+            <div class="phone-label">约见流程</div>
+        </div>
+        
+        <!-- 约会详情 -->
+        <div>
+            <div class="phone-container">
+                <div class="dynamic-island"></div>
+                <div class="screen">
+                    <iframe src="pages/date-details.html" class="iframe-container" scrolling="no"></iframe>
+                </div>
+            </div>
+            <div class="phone-label">约会详情</div>
+        </div>
+        
+        <!-- 红娘服务 -->
+        <div>
+            <div class="phone-container">
+                <div class="dynamic-island"></div>
+                <div class="screen">
+                    <iframe src="pages/matchmaker.html" class="iframe-container" scrolling="no"></iframe>
+                </div>
+            </div>
+            <div class="phone-label">红娘服务</div>
+        </div>
+        
+        <!-- 会员套餐 -->
+        <div>
+            <div class="phone-container">
+                <div class="dynamic-island"></div>
+                <div class="screen">
+                    <iframe src="pages/packages.html" class="iframe-container" scrolling="no"></iframe>
+                </div>
+            </div>
+            <div class="phone-label">会员套餐</div>
+        </div>
+        
+        <!-- 消息页面 -->
+        <div>
+            <div class="phone-container">
+                <div class="dynamic-island"></div>
+                <div class="screen">
+                    <iframe src="pages/messages.html" class="iframe-container" scrolling="no"></iframe>
+                </div>
+            </div>
+            <div class="phone-label">消息</div>
+        </div>
+    </div>
+</body>
+</html> 

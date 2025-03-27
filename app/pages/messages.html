@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消息 - 约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+        }
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .unread-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #FF6B6B;
+        }
+        .tab-item {
+            padding: 12px 0;
+            font-weight: 500;
+            position: relative;
+        }
+        .tab-item.active {
+            color: #FF6B6B;
+            font-weight: 600;
+        }
+        .tab-item.active:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background-color: #FF6B6B;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 引入iOS状态栏 -->
+    <iframe src="../components/statusbar.html" class="w-full h-10 border-0"></iframe>
+    
+    <!-- 顶部导航栏 -->
+    <div class="bg-white p-4 flex items-center sticky top-0 shadow-sm z-10">
+        <h1 class="text-xl font-bold text-gray-800">消息</h1>
+        <div class="ml-auto flex items-center space-x-3">
+            <button class="bg-gray-100 h-10 w-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-search text-gray-600"></i>
+            </button>
+            <button class="bg-gray-100 h-10 w-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-ellipsis-h text-gray-600"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 选项卡导航 -->
+    <div class="bg-white shadow-sm">
+        <div class="flex justify-around">
+            <div class="tab-item active text-center w-1/2">
+                <span>聊天</span>
+            </div>
+            <div class="tab-item text-center text-gray-500 w-1/2">
+                <span>通知</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 消息列表内容 -->
+    <div class="pb-24">
+        <!-- 系统消息 -->
+        <div class="bg-white p-4 border-b">
+            <div class="flex items-center">
+                <div class="h-12 w-12 rounded-full bg-pink-100 flex items-center justify-center">
+                    <i class="fas fa-bell text-pink-500"></i>
+                </div>
+                <div class="ml-4 flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-medium text-gray-800">系统通知</h3>
+                        <span class="text-xs text-gray-500">昨天</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-1 truncate">您的约会已经确认，请按时到达约会地点</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 红娘消息 -->
+        <div class="bg-white p-4 border-b">
+            <div class="flex items-center">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="红娘头像" class="h-12 w-12 rounded-full object-cover">
+                    <div class="absolute bottom-0 right-0 bg-green-500 h-3 w-3 rounded-full border-2 border-white"></div>
+                </div>
+                <div class="ml-4 flex-1">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-medium text-gray-800">红娘 周周</h3>
+                        <span class="text-xs text-gray-500">09:30</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-1 truncate">您好，我已经为您安排好了周六的约会，地点在...</p>
+                </div>
+                <div class="unread-dot"></div>
+            </div>
+        </div>
+        
+        <!-- 用户聊天列表 -->
+        <div class="conversation-item">
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="用户头像" class="h-12 w-12 rounded-full object-cover">
+                <div class="absolute bottom-0 right-0 bg-green-500 h-3 w-3 rounded-full border-2 border-white"></div>
+            </div>
+            <div class="ml-4 flex-1">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-medium text-gray-800">小雨</h3>
+                    <span class="text-xs text-gray-500">刚刚</span>
+                </div>
+                <p class="text-gray-600 text-sm mt-1 truncate">你好，很高兴认识你！我看到我们匹配度很高呢～</p>
+            </div>
+            <div class="bg-pink-500 rounded-full h-5 w-5 flex items-center justify-center">
+                <span class="text-white text-xs">1</span>
+            </div>
+        </div>
+        
+        <div class="conversation-item">
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="用户头像" class="h-12 w-12 rounded-full object-cover">
+                <div class="absolute bottom-0 right-0 bg-green-500 h-3 w-3 rounded-full border-2 border-white"></div>
+            </div>
+            <div class="ml-4 flex-1">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-medium text-gray-800">小美</h3>
+                    <span class="text-xs text-gray-500">昨天</span>
+                </div>
+                <p class="text-gray-600 text-sm mt-1 truncate">我们的约会定在周六下午3点，地点是三里屯那家咖啡厅，你看可以吗？</p>
+            </div>
+            <div class="unread-dot"></div>
+        </div>
+        
+        <div class="conversation-item">
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="用户头像" class="h-12 w-12 rounded-full object-cover">
+            </div>
+            <div class="ml-4 flex-1">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-medium text-gray-800">阳光</h3>
+                    <span class="text-xs text-gray-500">周二</span>
+                </div>
+                <p class="text-gray-600 text-sm mt-1 truncate">我平时工作比较忙，但周末时间很充裕，希望能找到志同道合的人一起分享生活</p>
+            </div>
+        </div>
+        
+        <div class="conversation-item">
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="用户头像" class="h-12 w-12 rounded-full object-cover">
+            </div>
+            <div class="ml-4 flex-1">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-medium text-gray-800">依依</h3>
+                    <span class="text-xs text-gray-500">上周</span>
+                </div>
+                <p class="text-gray-600 text-sm mt-1 truncate">我们上次聊得很开心，什么时候有空一起出来喝杯咖啡？</p>
+            </div>
+        </div>
+        
+        <div class="conversation-item">
+            <div class="relative">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="用户头像" class="h-12 w-12 rounded-full object-cover">
+            </div>
+            <div class="ml-4 flex-1">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-medium text-gray-800">大山</h3>
+                    <span class="text-xs text-gray-500">06/10</span>
+                </div>
+                <p class="text-gray-600 text-sm mt-1 truncate">我最近在策划一个旅行，听说你也喜欢摄影，有兴趣一起吗？</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 引入底部导航栏 -->
+    <iframe src="../components/navbar.html" class="w-full h-20 border-0 fixed bottom-0 left-0 right-0 z-50" scrolling="no" seamless></iframe>
+</body>
+</html> 

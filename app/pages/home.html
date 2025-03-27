@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - 约会通</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            width: 100%;
+        }
+        .main-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            height: calc(100% - 30px); /* 减去状态栏高度 */
+            position: relative;
+        }
+        .card-stack {
+            position: relative;
+            height: 500px;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 340px;
+        }
+        .card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            background-color: white;
+            transition: transform 0.3s ease;
+            top: 0;
+            left: 0;
+        }
+        .card.next {
+            transform: scale(0.95) translateY(10px);
+            z-index: 1;
+        }
+        .card.current {
+            z-index: 2;
+        }
+        .card-image {
+            width: 100%;
+            height: 70%;
+            object-fit: cover;
+            position: relative;
+        }
+        .card-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+        }
+        .tag {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+        }
+        .action-buttons {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 3;
+            margin-top: 20px;
+        }
+        .action-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            background-color: white;
+        }
+        .action-button:hover {
+            transform: scale(1.1);
+        }
+        .action-button.dislike {
+            color: #FF4C4C;
+        }
+        .action-button.like {
+            color: #FF6B6B;
+        }
+        .action-button.superlike {
+            color: #4CAEFF;
+        }
+        .card-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            color: white;
+            z-index: 2;
+        }
+        .swipe-hint {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            margin-bottom: 80px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #FF4757;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            z-index: 2;
+        }
+        .match-percent {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(255, 107, 107, 0.8);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 2;
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .location-bar {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 10px 16px;
+            border-top: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .location-icon {
+            color: #FF6B6B;
+            margin-right: 8px;
+        }
+        .current-location {
+            font-weight: 600;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- 引入iOS状态栏 -->
+        <iframe src="../components/statusbar.html" class="w-full h-10 border-0"></iframe>
+        
+        <div class="content-area">
+            <!-- 顶部导航栏 -->
+            <div class="bg-white p-4 flex items-center justify-between sticky-header shadow-sm">
+                <h1 class="text-xl font-bold text-gray-800">探索</h1>
+                <div class="flex space-x-3">
+                    <button class="bg-gray-100 h-10 w-10 rounded-full flex items-center justify-center">
+                        <i class="fas fa-sliders-h text-gray-600"></i>
+                    </button>
+                    <button class="bg-gray-100 h-10 w-10 rounded-full flex items-center justify-center">
+                        <i class="fas fa-map-marker-alt text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 当前位置 -->
+            <div class="location-bar">
+                <i class="fas fa-map-marker-alt location-icon"></i>
+                <span class="current-location">上海</span>
+            </div>
+            
+            <!-- 卡片堆栈区域 -->
+            <div class="py-4">
+                <div class="card-stack mx-auto">
+                    <!-- 当前卡片 -->
+                    <div class="card current">
+                        <div class="relative h-full">
+                            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="阳光的照片" class="w-full h-full object-cover">
+                            <div class="card-gradient"></div>
+                            
+                            <div class="badge">
+                                <i class="fas fa-crown mr-1"></i>
+                                <span>红娘精选</span>
+                            </div>
+                            
+                            <div class="match-percent">
+                                85% 匹配
+                            </div>
+                            
+                            <div class="card-info">
+                                <div class="flex items-center mb-1">
+                                    <h2 class="text-2xl font-bold">阳光</h2>
+                                    <span class="ml-2 text-pink-300 text-sm">30岁</span>
+                                </div>
+                                <p class="text-white text-opacity-90 text-sm mb-2">上海 · 产品经理</p>
+                                
+                                <div class="flex flex-wrap mt-2 mb-3">
+                                    <span class="tag">健身</span>
+                                    <span class="tag">阅读</span>
+                                    <span class="tag">电影</span>
+                                    <span class="tag">咖啡</span>
+                                </div>
+                                
+                                <p class="text-white text-opacity-90 text-sm">
+                                    工作之余喜欢健身和阅读，希望找到志同道合的伴侣一起成长。
+                                </p>
+                            </div>
+                            
+                            <!-- 添加一个覆盖整个卡片的透明按钮，用于点击进入详情页 -->
+                            <a href="user-detail.html" class="absolute inset-0 z-20 bg-transparent" aria-label="查看用户详情"></a>
+                        </div>
+                    </div>
+                    
+                    <!-- 下一张卡片 -->
+                    <div class="card next">
+                        <div class="relative h-full">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="小雨的照片" class="w-full h-full object-cover">
+                            <div class="card-gradient"></div>
+                            
+                            <div class="match-percent">
+                                90% 匹配
+                            </div>
+                            
+                            <div class="card-info">
+                                <div class="flex items-center mb-1">
+                                    <h2 class="text-2xl font-bold">小雨</h2>
+                                    <span class="ml-2 text-pink-300 text-sm">28岁</span>
+                                    <i class="fas fa-check-circle ml-1 text-blue-300"></i>
+                                </div>
+                                <p class="text-white text-opacity-90 text-sm">上海 · 金融分析师</p>
+                            </div>
+                            
+                            <!-- 添加一个覆盖整个卡片的透明按钮，用于点击进入详情页 -->
+                            <a href="user-detail.html" class="absolute inset-0 z-20 bg-transparent" aria-label="查看用户详情"></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="action-buttons">
+                    <div class="action-button dislike">
+                        <i class="fas fa-times text-2xl"></i>
+                    </div>
+                    <div class="action-button superlike">
+                        <i class="fas fa-star text-2xl"></i>
+                    </div>
+                    <div class="action-button like">
+                        <i class="fas fa-heart text-2xl"></i>
+                    </div>
+                </div>
+                
+                <div class="swipe-hint">
+                    <span>左滑不喜欢，右滑喜欢，上滑超级喜欢</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 引入底部导航栏 -->
+        <iframe src="../components/navbar.html" class="w-full h-20 border-0 fixed bottom-0 left-0 right-0 z-50" scrolling="no" seamless></iframe>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentCard = document.querySelector('.card.current');
+            const nextCard = document.querySelector('.card.next');
+            const likeBtn = document.querySelector('.action-button.like');
+            const dislikeBtn = document.querySelector('.action-button.dislike');
+            const superlikeBtn = document.querySelector('.action-button.superlike');
+            
+            // 点击事件处理 - 跳转到详情页
+            let isClick = true;
+            
+            // 拖拽相关变量
+            let isDragging = false;
+            let startX = 0;
+            let startY = 0;
+            let offsetX = 0;
+            let offsetY = 0;
+            
+            // 监听卡片的触摸/鼠标事件
+            currentCard.addEventListener('mousedown', dragStart);
+            currentCard.addEventListener('touchstart', dragStart);
+            
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('touchmove', dragMove);
+            
+            document.addEventListener('mouseup', dragEnd);
+            document.addEventListener('touchend', dragEnd);
+            
+            // 按钮点击事件
+            likeBtn.addEventListener('click', function() {
+                swipeCard('right');
+            });
+            
+            dislikeBtn.addEventListener('click', function() {
+                swipeCard('left');
+            });
+            
+            superlikeBtn.addEventListener('click', function() {
+                swipeCard('up');
+            });
+            
+            function dragStart(e) {
+                isDragging = true;
+                isClick = true;
+                if (e.type === 'touchstart') {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                } else {
+                    startX = e.clientX;
+                    startY = e.clientY;
+                }
+                
+                // 设置过渡为无，让移动更平滑
+                currentCard.style.transition = 'none';
+            }
+            
+            function dragMove(e) {
+                if (!isDragging) return;
+                
+                let currentX, currentY;
+                if (e.type === 'touchmove') {
+                    currentX = e.touches[0].clientX;
+                    currentY = e.touches[0].clientY;
+                } else {
+                    currentX = e.clientX;
+                    currentY = e.clientY;
+                }
+                
+                offsetX = currentX - startX;
+                offsetY = currentY - startY;
+                
+                // 如果拖动距离超过5px，则不是点击
+                if (Math.abs(offsetX) > 5 || Math.abs(offsetY) > 5) {
+                    isClick = false;
+                }
+                
+                // 设置卡片的位置
+                const rotate = offsetX * 0.1; // 根据横向移动添加旋转效果
+                currentCard.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${rotate}deg)`;
+                
+                // 根据拖动方向改变卡片透明度
+                if (offsetX > 50) {
+                    currentCard.style.opacity = '0.8';
+                    currentCard.style.boxShadow = '0 0 10px 5px rgba(0, 255, 0, 0.2)';
+                } else if (offsetX < -50) {
+                    currentCard.style.opacity = '0.8';
+                    currentCard.style.boxShadow = '0 0 10px 5px rgba(255, 0, 0, 0.2)';
+                } else if (offsetY < -50) {
+                    currentCard.style.opacity = '0.8';
+                    currentCard.style.boxShadow = '0 0 10px 5px rgba(0, 0, 255, 0.2)';
+                } else {
+                    currentCard.style.opacity = '1';
+                    currentCard.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.15)';
+                }
+            }
+            
+            function dragEnd() {
+                if (!isDragging) return;
+                isDragging = false;
+                
+                currentCard.style.transition = 'transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease';
+                
+                // 根据最终位置判断操作
+                if (offsetX > 100) {
+                    swipeCard('right'); // 右滑 - 喜欢
+                } else if (offsetX < -100) {
+                    swipeCard('left'); // 左滑 - 不喜欢
+                } else if (offsetY < -100) {
+                    swipeCard('up'); // 上滑 - 超级喜欢
+                } else {
+                    // 复位
+                    currentCard.style.transform = 'translate(0, 0) rotate(0deg)';
+                    currentCard.style.opacity = '1';
+                    currentCard.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.15)';
+                }
+            }
+            
+            function swipeCard(direction) {
+                // 设置卡片离开动画
+                if (direction === 'right') {
+                    currentCard.style.transform = 'translate(1000px, 0) rotate(30deg)';
+                } else if (direction === 'left') {
+                    currentCard.style.transform = 'translate(-1000px, 0) rotate(-30deg)';
+                } else if (direction === 'up') {
+                    currentCard.style.transform = 'translate(0, -1000px) rotate(0deg)';
+                }
+                
+                currentCard.style.opacity = '0';
+                
+                // 显示下一张卡片
+                setTimeout(() => {
+                    // 实际应用中这里应该请求新的数据
+                    nextCard.classList.remove('next');
+                    nextCard.classList.add('current');
+                    
+                    // 创建新的下一张卡片
+                    const newCard = currentCard.cloneNode(true);
+                    newCard.classList.remove('current');
+                    newCard.classList.add('next');
+                    newCard.style.transform = 'scale(0.95) translateY(10px)';
+                    newCard.style.opacity = '1';
+                    newCard.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.15)';
+                    
+                    // 更换图片和信息
+                    const randomPerson = ['https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-1.2.1', 
+                                        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-1.2.1',
+                                        'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-1.2.1'];
+                    const randomImage = randomPerson[Math.floor(Math.random() * randomPerson.length)];
+                    newCard.querySelector('img').src = randomImage + '&auto=format&fit=crop&w=1000&q=80';
+                    
+                    // 替换旧卡片
+                    document.querySelector('.card-stack').replaceChild(newCard, currentCard);
+                    
+                    // 更新引用
+                    document.querySelector('.card.current').addEventListener('mousedown', dragStart);
+                    document.querySelector('.card.current').addEventListener('touchstart', dragStart);
+                    
+                    // 为新卡片添加点击事件 - 跳转到详情页
+                    document.querySelector('.card.current').addEventListener('click', function(e) {
+                        if (isClick) {
+                            window.location.href = 'user-detail.html';
+                        }
+                    });
+                }, 300);
+            }
+        });
+    </script>
+</body>
+</html> 
